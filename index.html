@@ -58,7 +58,7 @@
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: #8B0000; /* Dark Red */
+            background: #8B0000;
         }
         .bg-heart::before { left: -15px; }
         .bg-heart::after { top: -15px; }
@@ -77,7 +77,6 @@
             }
         }
 
-
         /* --- Glassmorphism Box --- */
         .container {
             position: relative; 
@@ -88,17 +87,18 @@
             -webkit-backdrop-filter: blur(10px);
             border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 2rem;
+            padding: 2rem; /* Important Padding */
             text-align: center;
             
             /* Constraints */
             width: 90%; 
             max-width: 600px; 
-            min-height: 400px;
+            min-height: 450px; /* Increased height slightly for mobile space */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            overflow: hidden; /* STRICTLY HIDE OVERFLOW */
         }
 
         h1 {
@@ -146,14 +146,13 @@
         }
 
         .yes-btn {
-            padding: 12px 30px; /* Big padding */
-            font-size: 1.2rem; /* Big font */
+            padding: 12px 30px; 
+            font-size: 1.2rem; 
             background-color: #ff4757;
             color: white;
             box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
             z-index: 20; 
             
-            /* Positioned */
             position: absolute;
             left: 50%;
             transform: translateX(-140%);
@@ -161,22 +160,21 @@
         }
 
         .no-btn {
-            /* --- CHANGED: Shrunk Size --- */
-            padding: 8px 20px;   /* Smaller padding */
-            font-size: 0.9rem;   /* Smaller font */
+            padding: 8px 20px;   /* Small size */
+            font-size: 0.9rem;   
             
             background-color: white;
             color: #ff4757;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            
             position: absolute;
             z-index: 15;
             
             left: 50%;
             transform: translateX(40%); 
             
-            /* --- CHANGED: Visible Movement Transaction --- */
-            /* transition on top/left makes it glide smoothly */
-            transition: top 0.3s ease, left 0.3s ease, transform 0.3s ease;
+            /* Smooth glide transition */
+            transition: top 0.3s ease, left 0.3s ease;
         }
 
         /* --- Success Message --- */
@@ -196,6 +194,13 @@
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
             margin-top: 10px;
+        }
+        
+        /* Mobile Text Adjustments */
+        @media (max-width: 400px) {
+            h1 { font-size: 2.2rem; }
+            p { font-size: 1rem; }
+            .container { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -225,11 +230,10 @@
     <canvas id="confetti" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index: 999;"></canvas>
 
     <script>
-        // --- Generate Background Hearts ---
+        // --- Background Hearts ---
         function createBgHearts() {
             const container = document.getElementById('bgHearts');
             const heartCount = 25; 
-
             for (let i = 0; i < heartCount; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('bg-heart');
@@ -241,45 +245,56 @@
         }
         createBgHearts(); 
 
-        // --- Button Moving Logic ---
+        // --- STRICT Move Logic ---
         const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.querySelector('.yes-btn');
         const mainCard = document.getElementById('mainCard');
         const successMsg = document.getElementById('successMsg');
         const questionElements = mainCard.querySelectorAll('h1, p, .btn-group, .gif-container');
 
         function moveButton() {
-            // Remove the initial centering transform so it moves freely via Top/Left
+            // Disable the initial centering transform
             noBtn.style.transform = 'none';
 
-            // 1. Get box limits
+            // 1. Get exact container size
             const containerWidth = mainCard.clientWidth;
             const containerHeight = mainCard.clientHeight;
             const btnWidth = noBtn.offsetWidth;
             const btnHeight = noBtn.offsetHeight;
 
-            // 2. Margin
-            const margin = 20;
+            // 2. Define Strict Safety Margin
+            // The container has 2rem padding (approx 32px). 
+            // We use 40px to be absolutely safe and keep it away from the edge.
+            const safeMargin = 40; 
 
-            // 3. Max positions
-            const maxWidth = containerWidth - btnWidth - margin;
-            const maxHeight = containerHeight - btnHeight - margin;
+            // 3. Calculate Boundaries (Trap Zone)
+            // Left must be at least safeMargin
+            // Right must be (ContainerWidth - ButtonWidth - safeMargin)
+            const minX = safeMargin;
+            const maxX = containerWidth - btnWidth - safeMargin;
+            
+            const minY = safeMargin;
+            const maxY = containerHeight - btnHeight - safeMargin;
 
-            // 4. Randomize
-            const randomX = Math.random() * (maxWidth - margin) + margin;
-            const randomY = Math.random() * (maxHeight - margin) + margin;
+            // 4. Ensure we don't get negative values (if screen is super small)
+            // If maxX < minX, just center it roughly
+            const effectiveMaxX = Math.max(minX, maxX);
+            const effectiveMaxY = Math.max(minY, maxY);
 
-            // 5. Move (CSS Transition will handle the visual glide)
+            // 5. Generate Random Coordinates
+            const randomX = Math.random() * (effectiveMaxX - minX) + minX;
+            const randomY = Math.random() * (effectiveMaxY - minY) + minY;
+
+            // 6. Apply Movement
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
 
-        // Event Listeners
+        // Trigger on Mouseover (Desktop) and Touch (Mobile)
         noBtn.addEventListener('mouseover', moveButton);
         noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
         noBtn.addEventListener('click', (e) => { e.preventDefault(); moveButton(); });
 
-        // --- Success ---
+        // --- Success Logic ---
         function acceptProposal() {
             questionElements.forEach(el => el.style.display = 'none');
             successMsg.style.display = 'block';
