@@ -7,13 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* --- Base Setup --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; 
-        }
+        /* --- Reset --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             height: 100vh;
@@ -23,184 +18,126 @@
             justify-content: center;
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            
-            /* Pink Gradient Background */
             background: linear-gradient(to top, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
         }
 
-        /* --- Background Floating Hearts --- */
+        /* --- Background Hearts --- */
         .bg-hearts-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; z-index: 0; pointer-events: none;
         }
 
         .bg-heart {
-            position: absolute;
-            bottom: -50px;
-            width: 30px;
-            height: 30px;
-            background: #8B0000; /* Dark Red */
-            transform: rotate(45deg);
-            opacity: 0;
+            position: absolute; bottom: -50px; width: 30px; height: 30px;
+            background: #8B0000; transform: rotate(45deg); opacity: 0;
             animation: rise 6s linear infinite;
         }
-
-        .bg-heart::before,
-        .bg-heart::after {
-            content: "";
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: #8B0000;
+        .bg-heart::before, .bg-heart::after {
+            content: ""; position: absolute; width: 30px; height: 30px;
+            border-radius: 50%; background: #8B0000;
         }
         .bg-heart::before { left: -15px; }
         .bg-heart::after { top: -15px; }
 
         @keyframes rise {
-            0% {
-                bottom: -10vh;
-                transform: translateX(0) rotate(45deg) scale(0.5);
-                opacity: 0;
-            }
+            0% { bottom: -10vh; transform: translateX(0) rotate(45deg) scale(0.5); opacity: 0; }
             20% { opacity: 0.8; }
-            100% {
-                bottom: 110vh;
-                transform: translateX(-20px) rotate(405deg) scale(1); 
-                opacity: 0;
-            }
+            100% { bottom: 110vh; transform: translateX(-20px) rotate(405deg) scale(1); opacity: 0; }
         }
 
-        /* --- Glassmorphism Box --- */
+        /* --- Glass Box --- */
         .container {
-            position: relative; 
+            position: relative; /* Anchor for absolute button */
             z-index: 10;
             background: rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border-radius: 25px;
             border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 2rem; /* Important Padding */
-            text-align: center;
+            padding: 2rem;
             
-            /* Constraints */
             width: 90%; 
             max-width: 600px; 
-            min-height: 450px; /* Increased height slightly for mobile space */
+            height: 500px; /* Fixed height ensures boundaries are stable */
+            
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            overflow: hidden; /* STRICTLY HIDE OVERFLOW */
+            /* overflow: hidden;  <-- Removed this so if it touches edge it doesn't get cut off, but logic prevents it anyway */
         }
 
         h1 {
-            color: #fff;
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            pointer-events: none; 
+            color: #fff; font-family: 'Dancing Script', cursive; font-size: 3rem;
+            margin-bottom: 0.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); pointer-events: none; margin-top: 20px;
         }
 
         p {
-            color: #fff;
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            pointer-events: none;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-            font-weight: 600;
+            color: #fff; font-size: 1.2rem; margin-bottom: 2rem; pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1); font-weight: 600;
         }
 
         .gif-container img {
-            width: 140px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 1rem;
-            pointer-events: none;
+            width: 140px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1rem; pointer-events: none;
         }
 
         /* --- Buttons --- */
-        .btn-group {
-            width: 100%;
-            height: 60px; 
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        button {
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-
         .yes-btn {
+            position: absolute;
+            bottom: 80px; /* Fixed position at bottom */
+            left: 50%;
+            transform: translateX(-150%); /* Move left of center */
+            
             padding: 12px 30px; 
             font-size: 1.2rem; 
-            background-color: #ff4757;
-            color: white;
+            border: none; border-radius: 50px; cursor: pointer;
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            background-color: #ff4757; color: white;
             box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
-            z-index: 20; 
-            
-            position: absolute;
-            left: 50%;
-            transform: translateX(-140%);
-            transition: transform 0.2s;
+            z-index: 20;
         }
 
         .no-btn {
-            padding: 8px 20px;   /* Small size */
-            font-size: 0.9rem;   
-            
-            background-color: white;
-            color: #ff4757;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            
             position: absolute;
+            bottom: 80px; /* Start aligned with Yes */
+            left: 50%;
+            transform: translateX(50%); /* Move right of center */
+            
+            padding: 8px 20px; /* Shrunk size */
+            font-size: 0.9rem;   
+            border: none; border-radius: 50px; cursor: pointer;
+            font-family: 'Poppins', sans-serif; font-weight: 600;
+            background-color: white; color: #ff4757;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             z-index: 15;
             
-            left: 50%;
-            transform: translateX(40%); 
-            
-            /* Smooth glide transition */
-            transition: top 0.3s ease, left 0.3s ease;
+            /* The Visual Glide */
+            transition: all 0.3s ease; 
         }
 
         /* --- Success Message --- */
         .success-message {
-            display: none;
-            animation: popIn 0.5s ease;
+            display: none; animation: popIn 0.5s ease;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100%;
         }
         
         @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
         }
 
         .success-message h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-            margin-top: 10px;
+            font-family: 'Dancing Script', cursive; font-size: 2.5rem;
+            color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); margin-top: 10px;
         }
         
-        /* Mobile Text Adjustments */
+        /* Mobile Tweaks */
         @media (max-width: 400px) {
             h1 { font-size: 2.2rem; }
-            p { font-size: 1rem; }
-            .container { padding: 1.5rem; }
+            .container { height: 450px; }
+            .yes-btn { transform: translateX(-130%); }
+            .no-btn { transform: translateX(30%); }
         }
     </style>
 </head>
@@ -216,10 +153,8 @@
         <h1>Will you be my Valentine?</h1>
         <p>I promise to be the best! 🌹</p>
 
-        <div class="btn-group">
-            <button class="yes-btn" onclick="acceptProposal()">Yes</button>
-            <button class="no-btn" id="noBtn">No</button>
-        </div>
+        <button class="yes-btn" onclick="acceptProposal()">Yes</button>
+        <button class="no-btn" id="noBtn">No</button>
         
         <div class="success-message" id="successMsg">
             <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXN5eWk4aTh3a3Z4Z2w4Ynh4Zm14ciZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/iCVzZwwE6QhZPqXbfb/giphy.gif" alt="Happy Cat" style="width: 150px;">
@@ -233,8 +168,7 @@
         // --- Background Hearts ---
         function createBgHearts() {
             const container = document.getElementById('bgHearts');
-            const heartCount = 25; 
-            for (let i = 0; i < heartCount; i++) {
+            for (let i = 0; i < 20; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('bg-heart');
                 heart.style.left = Math.random() * 100 + '%';
@@ -245,58 +179,61 @@
         }
         createBgHearts(); 
 
-        // --- STRICT Move Logic ---
+        // --- SAFE MOVE LOGIC ---
         const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.querySelector('.yes-btn');
         const mainCard = document.getElementById('mainCard');
         const successMsg = document.getElementById('successMsg');
-        const questionElements = mainCard.querySelectorAll('h1, p, .btn-group, .gif-container');
+        const questionElements = mainCard.querySelectorAll('h1, p, .gif-container');
 
         function moveButton() {
-            // Disable the initial centering transform
+            // 1. Reset any transforms so we are working with pure Left/Top
             noBtn.style.transform = 'none';
 
-            // 1. Get exact container size
+            // 2. Get container dimensions
             const containerWidth = mainCard.clientWidth;
             const containerHeight = mainCard.clientHeight;
             const btnWidth = noBtn.offsetWidth;
             const btnHeight = noBtn.offsetHeight;
 
-            // 2. Define Strict Safety Margin
-            // The container has 2rem padding (approx 32px). 
-            // We use 40px to be absolutely safe and keep it away from the edge.
-            const safeMargin = 40; 
+            // 3. Define Margins (Keep away from edge)
+            const padding = 20;
 
-            // 3. Calculate Boundaries (Trap Zone)
-            // Left must be at least safeMargin
-            // Right must be (ContainerWidth - ButtonWidth - safeMargin)
-            const minX = safeMargin;
-            const maxX = containerWidth - btnWidth - safeMargin;
-            
-            const minY = safeMargin;
-            const maxY = containerHeight - btnHeight - safeMargin;
+            // 4. Calculate Safe Zone
+            const maxLeft = containerWidth - btnWidth - padding;
+            const maxTop = containerHeight - btnHeight - padding;
 
-            // 4. Ensure we don't get negative values (if screen is super small)
-            // If maxX < minX, just center it roughly
-            const effectiveMaxX = Math.max(minX, maxX);
-            const effectiveMaxY = Math.max(minY, maxY);
+            // 5. Randomize
+            let randomLeft = Math.floor(Math.random() * maxLeft);
+            let randomTop = Math.floor(Math.random() * maxTop);
 
-            // 5. Generate Random Coordinates
-            const randomX = Math.random() * (effectiveMaxX - minX) + minX;
-            const randomY = Math.random() * (effectiveMaxY - minY) + minY;
+            // 6. Enforce Min Margins (Clamp)
+            if (randomLeft < padding) randomLeft = padding;
+            if (randomTop < padding) randomTop = padding;
 
-            // 6. Apply Movement
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+            // 7. Apply (This triggers the CSS transition)
+            noBtn.style.left = randomLeft + 'px';
+            noBtn.style.top = randomTop + 'px';
         }
 
-        // Trigger on Mouseover (Desktop) and Touch (Mobile)
+        // --- Events ---
         noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
-        noBtn.addEventListener('click', (e) => { e.preventDefault(); moveButton(); });
+        noBtn.addEventListener('touchstart', (e) => { 
+            e.preventDefault(); // Stop click
+            moveButton(); 
+        });
+        noBtn.addEventListener('click', (e) => { 
+            e.preventDefault(); 
+            moveButton(); 
+        });
 
-        // --- Success Logic ---
+        // --- Success ---
         function acceptProposal() {
+            // Hide everything except the message
             questionElements.forEach(el => el.style.display = 'none');
+            yesBtn.style.display = 'none';
+            noBtn.style.display = 'none';
+            
             successMsg.style.display = 'block';
             startConfetti();
         }
@@ -312,11 +249,8 @@
         function startConfetti() {
             for(let i=0; i<150; i++) {
                 particles.push({
-                    x: window.innerWidth / 2,
-                    y: window.innerHeight / 2,
-                    r: Math.random() * 6 + 2,
-                    dx: Math.random() * 10 - 5,
-                    dy: Math.random() * 10 - 5,
+                    x: window.innerWidth / 2, y: window.innerHeight / 2,
+                    r: Math.random() * 6 + 2, dx: Math.random() * 10 - 5, dy: Math.random() * 10 - 5,
                     color: colors[Math.floor(Math.random() * colors.length)]
                 });
             }
@@ -327,20 +261,15 @@
             requestAnimationFrame(animateConfetti);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach((p, index) => {
-                ctx.fillStyle = p.color;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
                 p.x += p.dx; p.y += p.dy; p.dy += 0.1; p.r *= 0.96;
                 if(p.r < 0.1) particles.splice(index, 1);
             });
         }
         
         window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         });
     </script>
 </body>
 </html>
-
